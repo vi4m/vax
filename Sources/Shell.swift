@@ -57,6 +57,10 @@ final class Shell {
         
         task.launch()
         task.waitUntilExit()
+
+        errorHandle.readabilityHandler = nil
+        outHandle.readabilityHandler = nil
+
         let status = task.terminationStatus
 
         if status != 0 {
