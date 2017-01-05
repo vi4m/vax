@@ -8,14 +8,15 @@ and remembering to commit changes. Something like vagrant up && vagrant ssh. Do 
 entire Vagrant for that ? No. 
 
 ```
-  vax init ubuntu:14.04
+  vax init ubuntu:14.04 hacking
   
 ```
 
 It creates .vax.toml 
 ```
-image = "ubuntu:14.04"
-temp_name = "temp"⏎                
+source_image = "ubuntu:14.04"
+dest_image = "hacking"
+temp_name = "temp_hacking"    
 ```
 
 Now you can "up" your container with
