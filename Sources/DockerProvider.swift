@@ -39,7 +39,7 @@ class DockerShellProvider: DockerProvider {
 
     func removeContainer(name: String) throws {
         let args = "rm -f \(name)".components(separatedBy: " ")
-        try Shell.system(cmd: dockerCommand, args: args, silent: false)
+        try Shell.system(cmd: dockerCommand, args: args, silent: true)
     }
     
     func removeImage(name: String) throws {
