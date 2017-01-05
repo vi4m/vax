@@ -8,13 +8,14 @@
 
 import Foundation
 
-
 protocol DockerProvider {
-    func run(image: String, temporaryContainerName: String) throws
+    func runContainer(image: String, temporaryContainerName: String, command: String) throws
+    func runContainerInteractive(image: String, temporaryContainerName: String) throws
     func remove(name: String) throws
     func commit(name: String, image: String) throws
 }
 
+//FIXME: make it api in the future.
 
 class DockerShellProvider: DockerProvider {
 
@@ -23,17 +24,22 @@ class DockerShellProvider: DockerProvider {
     init(dockerCommand: String = "/usr/local/bin/docker") {
         self.dockerCommand = dockerCommand
     }
-
-    func run(image: String, temporaryContainerName: String) throws {
+    
+    func runContainer(image: String, temporaryContainerName: String, command: String) throws {
+        let args = ("run --name \(temporaryContainerName) " +
+            "--privileged \(image) \(command)").components(separatedBy: " ")
+        try Shell.system(cmd: dockerCommand, args: args)
+    }
+    func runContainerInteractive(image: String, temporaryContainerName: String) throws {
         let args = ("run -ti --name \(temporaryContainerName) " +
-            "--privileged \(image)").components(separatedBy: " ")
+            "--privileged \(image) /bin/bash").components(separatedBy: " ")
         try Shell.systemWithTTY(cmd: dockerCommand, args: args)
     }
 
     func remove(name: String) throws {
         let cmd = "/usr/local/bin/docker"
         let args = "rm \(name)".components(separatedBy: " ")
-        Shell.system(cmd: cmd, args: args)
+        Shell.system(cmd: cmd, args: args, silent: true)
     }
 
     func commit(name: String, image repository: String) throws {
