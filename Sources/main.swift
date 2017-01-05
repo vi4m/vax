@@ -22,7 +22,7 @@ let g = Group {
         }
         
         let docker = DockerShellProvider()
-        try? docker.remove(name: config.temporaryName)
+        try? docker.removeContainer(name: config.temporaryName)
         do {
             try docker.runContainerInteractive(image: config.destImage, temporaryContainerName: config.temporaryName)
             try docker.commit(name: config.temporaryName, image: config.destImage)
@@ -43,14 +43,15 @@ let g = Group {
             }
 
             let docker = DockerShellProvider()
-            try? docker.remove(name: config.destImage)
-            try? docker.remove(name: config.temporaryName)
+            try? docker.removeImage(name: config.destImage)
+            try? docker.removeContainer(name: config.temporaryName)
             
-            try docker.runContainer(image: config.destImage, temporaryContainerName: config.temporaryName, command: "echo \"Init...\"")
+            try docker.runContainer(image: config.sourceImage, temporaryContainerName: config.temporaryName, command: "echo \"Init...\"")
             try docker.commit(name: config.temporaryName, image: config.destImage)
+            print("Done.")
             
         } catch {
-            print("Can't write")
+            print("Cannot initialize.")
         }
     }
 }
