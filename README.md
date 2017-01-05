@@ -28,7 +28,7 @@ Now you can "up" your container with
   Ctrl+D
 ```
 
-Your changes are persistent between sessions:
+Just as in Vagrant, your changes are kept persistent between sessions:
   
 ```
   vax run 
