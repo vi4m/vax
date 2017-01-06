@@ -7,14 +7,9 @@ enum ConfigurationError: Error {
     case CannotReadError
 }
 
-
 let g = Group {
-
-
     let pwd: NSString = FileManager.default.currentDirectoryPath as NSString
     let final = pwd.appendingPathComponent(Configuration.configName)
-
-
     $0.command("run") {
         guard let config = try? Configuration.read(path: final) else {
             print("Cannot read configuration file")
@@ -28,7 +23,7 @@ let g = Group {
             try docker.commit(name: config.temporaryName, image: config.destImage)
         } catch {
             print(error)
-            exit(4)
+            exit(3)
         }
         exit(0)
     }
