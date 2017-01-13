@@ -1,6 +1,6 @@
 # vax
 
-Vax allows you to work on set of virtualmachines using only Docker. When using Docker on OSX it is much faster, easy on resources, than Vagrant. 
+Vax allows you to work on set of virtualmachines using only Docker. When using Docker on OSX it is much faster, easier on resources, than Vagrant. 
 
 
 ## But ... docker want's to be immutable?
