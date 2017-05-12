@@ -9,8 +9,8 @@ In production - yes. But during development, you often want to just hack on some
 
 ## Installation (homebrew - macOS)
 
-  brew tap vi4m/repo
-  brew install vax
+    brew tap vi4m/repo
+    brew install vax
 
 
 ## How does it work?
