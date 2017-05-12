@@ -7,6 +7,12 @@ Vax allows you to work on set of virtualmachines using only Docker. When using D
 
 In production - yes. But during development, you often want to just hack on some ubuntu stuff without creating Dockerfile's just to be erased after docker exit. Missing Vagrant like vagrant up && vagrant ssh ? Vax to the rescue.
 
+## Installation (homebrew - macOS)
+
+  brew tap vi4m/repo
+  brew install vax
+
+
 ## How does it work?
 
 Vax is just a simple wrapper to `docker run` +  `docker commit` during development which takes care of keeping images in order.
