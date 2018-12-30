@@ -7,35 +7,32 @@
 //
 
 import Foundation
-//import Toml
+// import Toml
 
 public struct Container: Codable {
     public var caption: String
     public var image: String
-    
+
     public init(caption: String, image: String) {
         self.caption = caption
         self.image = image
     }
 }
 
-
 public struct Containers: Codable {
-    
     public init(containers: [String: Container]) {
         self.containers = containers
     }
-    
+
     public var containers: [String: Container]
 }
 
 public final class Configuration {
-
     var path: String
 
-    static public var configName = ".vax.toml"
+    public static var configName = ".vax.toml"
 
-    public init(path: String, sourceImage: String, destImage: String, temporaryName: String) {
+    public init(path: String, sourceImage _: String, destImage _: String, temporaryName _: String) {
         self.path = path
     }
 
@@ -44,7 +41,7 @@ public final class Configuration {
         let data = try Data(contentsOf: path)
         return try decoder.decode(Containers.self, from: data)
     }
-    
+
     public static func save(path: URL, containers: Containers) throws {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
@@ -52,4 +49,3 @@ public final class Configuration {
         try output.write(to: path)
     }
 }
-

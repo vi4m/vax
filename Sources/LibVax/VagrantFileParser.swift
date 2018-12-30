@@ -9,8 +9,8 @@
 import Foundation
 import Regex
 
-public struct VagrantFileParser  {
-    public static func extractProvisionCommand(s:String) -> String? {
+public struct VagrantFileParser {
+    public static func extractProvisionCommand(s: String) -> String? {
         let greeting = Regex("config.vm.provision.*path:\\s*[\"']+(.*)[\"']+")
         return greeting.match(s)?.captures[0]
     }

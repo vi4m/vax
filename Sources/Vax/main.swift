@@ -8,20 +8,18 @@ enum ConfigurationError: Error {
 }
 
 let g = Group {
-
     var pwd = URL(string: FileManager.default.currentDirectoryPath)!
     var configPath = pwd.appendingPathComponent(Configuration.configName)
-    
+
     if !FileManager.default.fileExists(atPath: configPath.path) {
-        
         if #available(OSX 10.12, *) {
             configPath = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(Configuration.configName)
         } else {
-            fatalError();
+            fatalError()
         }
     }
 
-    $0.command("vagrant_run", description: "Run vagrant") { (vagrantFile:String) in
+    $0.command("vagrant_run", description: "Run vagrant") { (vagrantFile: String) in
         guard let fileContents = try? String(contentsOfFile: vagrantFile) else {
             print("Cannot read file")
             exit(3)
@@ -35,11 +33,10 @@ let g = Group {
 
         let docker = DockerShellProvider()
 
-
 //        try docker.runContainer(image: "ubuntu:16.04", temporaryContainerName: "vagrant_temp", command: "", fromVolume: <#String#>)
 //        try docker.commit(name: config.temporaryName, image: config.destImage)
     }
-    
+
     $0.command("list") {
         guard let config = try? Configuration.read(path: configPath) else {
             print("Cannot read configuration file")
@@ -48,17 +45,17 @@ let g = Group {
     }
 
     $0.command("run") { (caption: String) in
-        
+
         guard let config = try? Configuration.read(path: configPath) else {
             print("Cannot read configuration file")
             exit(2)
         }
-        
+
         guard let entry = config.containers[caption] else {
             print("Cannot find entry")
             exit(0)
         }
-        
+
         let docker = DockerShellProvider()
         try? docker.removeContainer(name: entry.caption + "_temp")
         do {
@@ -76,19 +73,18 @@ let g = Group {
     $0.command("init") { (image: String, caption: String) in
         do {
             var config = (try? Configuration.read(path: configPath)) ?? Containers(containers: [:])
-            
+
             let entry = Container(caption: caption, image: image)
 
             let docker = DockerShellProvider()
             try? docker.removeImage(name: entry.caption)
             try? docker.removeContainer(name: entry.caption + "_temp")
-            
+
             try docker.runContainer(image: entry.image,
                                     temporaryContainerName: entry.caption + "_temp",
                                     command: "echo \"Init...\"",
                                     fromVolume: "/Users/marcinkliks",
-                                    toVolume: "/opt"
-            )
+                                    toVolume: "/opt")
             try docker.commit(name: entry.caption + "_temp", image: entry.caption)
             config.containers[caption] = entry
             try Configuration.save(path: configPath, containers: config)
@@ -99,4 +95,3 @@ let g = Group {
 }
 
 g.run()
-

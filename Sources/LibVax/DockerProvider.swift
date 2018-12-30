@@ -16,16 +16,15 @@ protocol DockerProvider {
     func commit(name: String, image: String) throws
 }
 
-//FIXME: make it api in the future.
+// FIXME: make it api in the future.
 
 public class DockerShellProvider: DockerProvider {
-
     var dockerCommand: String
-    
+
     public init(dockerCommand: String = "/usr/local/bin/docker") {
         self.dockerCommand = dockerCommand
     }
-    
+
     public func runContainer(image: String, temporaryContainerName: String, command: String,
                              fromVolume: String, toVolume: String) throws {
         let volumeString = "\(fromVolume):\(toVolume)"
@@ -33,6 +32,7 @@ public class DockerShellProvider: DockerProvider {
             "--privileged -v \(volumeString) \(image) \(command)").components(separatedBy: " ")
         try Shell.system(cmd: dockerCommand, args: args)
     }
+
     public func runContainerInteractive(image: String, temporaryContainerName: String, fromVolume: String, toVolume: String) throws {
         let volumeString = "\(fromVolume):\(toVolume)"
 
@@ -45,7 +45,7 @@ public class DockerShellProvider: DockerProvider {
         let args = "rm -f \(name)".components(separatedBy: " ")
         try Shell.system(cmd: dockerCommand, args: args, silent: true)
     }
-    
+
     public func removeImage(name: String) throws {
         let args = "rmi \(name)".components(separatedBy: " ")
         try Shell.system(cmd: dockerCommand, args: args, silent: true)
@@ -56,5 +56,4 @@ public class DockerShellProvider: DockerProvider {
         let args = "commit \(name) \(repository)".components(separatedBy: " ")
         try Shell.system(cmd: cmd, args: args, silent: true)
     }
-
 }
